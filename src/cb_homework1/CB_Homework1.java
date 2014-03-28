@@ -22,6 +22,9 @@ public class CB_Homework1 {
         Scanner input = new Scanner(System.in);
         String strSequence1 = "g,a,a,t,t,c,a,g,t,t,a";
         String strSequence2 = "g,g,a,t,c,g,a";
+//        String strSequence1 = "g,a,a,t,t,c,a,g,t,t,a,c,g,t,a,t,a,c,a,g,a";
+//        String strSequence2 = "g,g,a,t,c,g,a,c,c,a,t,t,c,g,c,a,c,g,t,t,a";        
+        
         
 //        String strSequence1 = "";
 //        String strSequence2 = "";        
