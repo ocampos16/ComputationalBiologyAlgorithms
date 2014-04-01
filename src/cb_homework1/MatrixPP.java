@@ -202,13 +202,15 @@ public class MatrixPP {
                 System.out.println("Non Iguales");
             }
             
-            System.out.println("this.matrix[tempI - 1][tempJ - 1] = "+this.matrix[tempI - 1][tempJ - 1]);
+            System.out.println("tempI - 1 = "+(tempI - 1));
+            System.out.println("tempJ - 1 = "+(tempJ - 1));
+            System.out.println("this.matrix[tempI - 1][tempJ - 1] = "+(this.matrix[tempJ - 1][tempI - 1]));
             System.out.println("tempMatchMis = "+tempMatchMis);
             System.out.println("this.matrix[tempAnsI][tempAnsJ] = "+this.matrix[tempAnsI][tempAnsJ]);
-            System.out.println("this.matrix[tempI - 1][tempJ - 1] + tempMatchMis = " + (this.matrix[tempI - 1][tempJ - 1] + tempMatchMis));
+            System.out.println("this.matrix[tempI - 1][tempJ - 1] + tempMatchMis = " + (this.matrix[tempJ - 1][tempI - 1] + tempMatchMis));
             System.out.println("this.matrix[tempAnsI][tempAnsJ] + this.gapPenalty = " + (this.matrix[tempAnsI][tempAnsJ] + this.gapPenalty));
             
-            if ( (this.matrix[tempI - 1][tempJ - 1] + tempMatchMis) >= 
+            if ( (this.matrix[tempJ - 1][tempI - 1] + tempMatchMis) >= 
                  (this.matrix[tempAnsI][tempAnsJ] + this.gapPenalty) ){
                 
                 //We start writing our sequence
