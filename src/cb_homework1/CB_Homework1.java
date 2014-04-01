@@ -48,9 +48,6 @@ public class CB_Homework1 {
         
         //We create the matrix
         MatrixPP mpp = new MatrixPP(strSequence1, strSequence2);
-        //We print the matrix
-        System.out.println();
-        System.out.println(mpp.toString());
         
     }//End public static void main(String[] args)
 }//End public class CB_Homework1
