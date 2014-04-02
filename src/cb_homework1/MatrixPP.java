@@ -17,30 +17,35 @@ public class MatrixPP {
     String[] sequence1;
     String[] sequence2;
     int[][] matrix;
-    int gapPenalty = -2;
-    int misMatchGood = 2;
-    int misMatchBad = -1;
+    private int gapPenalty = 0;
+    private int misMatchGood = 1;
+    private int misMatchBad = 0;
     
     //Final Alignment
     ArrayList<Alignment> finalAlignment;
             
     public MatrixPP(){
         
-        //Determine finalAlignment1 length
-        
+        //Determine finalAlignment1 length        
         
     }//End public MatrixPP()
 
     public MatrixPP(String seq1, String seq2){
-
+   
+        
+    }//End public MatrixPP(String seq1, String seq2)
+        
+    public void execute(String seq1, String seq2){
+                   
+        //We initialize the sequences
         seq1 = seq1.toLowerCase();
         this.sequence1 = seq1.split(",");        
         seq2 = seq2.toLowerCase();
-        this.sequence2 = seq2.split(",");
+        this.sequence2 = seq2.split(",");               
         
         //We initialize the matrix
-        this.matrix = new int[seq2.length()+1][seq1.length()+1];
-                
+        this.matrix = new int[seq2.length()+1][seq1.length()+1];           
+        
         this.fillMatrixWithCeros();
         
         this.calculateMaximum();                
@@ -51,10 +56,10 @@ public class MatrixPP {
         
         this.traceBack();
         
-        this.printFinalAlignment();
-        
-    }//End public MatrixPP(String seq1, String seq2)
-        
+        this.printFinalAlignment();        
+            
+    }//End public void execute()
+    
     private void fillMatrixWithCeros(){
     
         for (int i = 0; i < this.sequence2.length+1; i++) {
@@ -132,7 +137,7 @@ public class MatrixPP {
             int tempJDiagonal = tempCell[1] - 1;
             //We determine the value of the diagonal
             if ( alignment1.get(0).equals(alignment2.get(0))){
-                tempValueDiagonal = this.matrix[tempIDiagonal][tempJDiagonal] + this.misMatchGood;
+                tempValueDiagonal = this.matrix[tempIDiagonal][tempJDiagonal] + this.getMisMatchGood();
             }//End if ( alignment1.get(0).equals(alignment2.get(0)))
             else {            
                 tempValueDiagonal = this.matrix[tempIDiagonal][tempJDiagonal];
@@ -142,13 +147,13 @@ public class MatrixPP {
             int tempITop = tempCell[0] - 1;
             int tempJTop = tempCell[1];
             //We determine the value of the diagonal
-            tempValueTop = this.matrix[tempITop][tempJTop] + this.gapPenalty;
+            tempValueTop = this.matrix[tempITop][tempJTop] + this.getGapPenalty();
             
             //Left
             int tempILeft = tempCell[0];
             int tempJLeft = tempCell[1] - 1;
             //We determine the value of the diagonal
-            tempValueLeft = this.matrix[tempILeft][tempJLeft] + this.gapPenalty;                                    
+            tempValueLeft = this.matrix[tempILeft][tempJLeft] + this.getGapPenalty();                                    
             
             //We add the alignment to the final alignment set "Answer"
             Alignment alig = (getMaxAlignment(tempValueDiagonal, tempValueLeft, tempValueTop, alignment1, alignment2));
@@ -192,9 +197,16 @@ public class MatrixPP {
             //We determine the largest of them, if equal we priorize diagonal, left and top in that order
             if ( (tempValueDiagonal >= tempValueLeft) && (tempValueDiagonal >= tempValueTop) ){
             
+                String line;
+                
+                if (alignment1.get(0).equals(alignment2.get(0)))
+                    line = "|";
+                else
+                    line = " ";                    
+                
                 //We add the values to the alignment
                 alig.setSequence1Char(alignment1.remove(0));
-                alig.setAlignmentType("|");
+                alig.setAlignmentType(line);
                 alig.setSequence2Char(alignment2.remove(0));
                 alig.setDescription("Diagonal");
                 
@@ -288,5 +300,47 @@ public class MatrixPP {
         System.out.println(string);
     
     }//End public void printFinalAlignment()       
+
+    /**
+     * @return the gapPenalty
+     */
+    public int getGapPenalty() {
+        return gapPenalty;
+    }
+
+    /**
+     * @param gapPenalty the gapPenalty to set
+     */
+    public void setGapPenalty(int gapPenalty) {
+        this.gapPenalty = gapPenalty;
+    }
+
+    /**
+     * @return the misMatchGood
+     */
+    public int getMisMatchGood() {
+        return misMatchGood;
+    }
+
+    /**
+     * @param misMatchGood the misMatchGood to set
+     */
+    public void setMisMatchGood(int misMatchGood) {
+        this.misMatchGood = misMatchGood;
+    }
+
+    /**
+     * @return the misMatchBad
+     */
+    public int getMisMatchBad() {
+        return misMatchBad;
+    }
+
+    /**
+     * @param misMatchBad the misMatchBad to set
+     */
+    public void setMisMatchBad(int misMatchBad) {
+        this.misMatchBad = misMatchBad;
+    }
     
 }//End public class MatrixPP
