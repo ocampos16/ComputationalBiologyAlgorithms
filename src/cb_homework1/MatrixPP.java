@@ -17,9 +17,13 @@ public class MatrixPP {
     String[] sequence1;
     String[] sequence2;
     int[][] matrix;
-    int gapPenalty = -2;
-    int misMatchGood = 2;
-    int misMatchBad = -1;
+    int gapPenalty = 0;
+    int misMatchGood = 1;
+    int misMatchBad = 0;
+    
+    //Strings
+    String sMatrix;
+    String sFinalAlignment;
     
     //Final Alignment
     ArrayList<Alignment> finalAlignment;
@@ -39,22 +43,35 @@ public class MatrixPP {
         this.sequence2 = seq2.split(",");
         
         //We initialize the matrix
-        this.matrix = new int[seq2.length()+1][seq1.length()+1];
-                
+        this.matrix = new int[seq2.length()+1][seq1.length()+1];               
+        
+    }//End public MatrixPP(String seq1, String seq2)
+        
+    
+    public void execute(String seq1, String seq2, int m, int mis, int p){
+    
+        //Sequences
+        seq1 = seq1.toLowerCase();
+        this.sequence1 = seq1.split(",");        
+        seq2 = seq2.toLowerCase();
+        this.sequence2 = seq2.split(",");
+        //Numbers
+        this.misMatchGood = m;
+        this.misMatchBad = mis;
+        this.gapPenalty = p;        
+        
         this.fillMatrixWithCeros();
         
         this.calculateMaximum();                
         
-        System.out.println();
-        //System.out.println(mpp.toString());
-        this.printMatrix();
+        this.sMatrix = this.printMatrix();
         
         this.traceBack();
         
-        this.printFinalAlignment();
-        
-    }//End public MatrixPP(String seq1, String seq2)
-        
+        this.sFinalAlignment = this.printFinalAlignment();
+    
+    }//End public void execute()
+    
     private void fillMatrixWithCeros(){
     
         for (int i = 0; i < this.sequence2.length+1; i++) {
@@ -192,9 +209,16 @@ public class MatrixPP {
             //We determine the largest of them, if equal we priorize diagonal, left and top in that order
             if ( (tempValueDiagonal >= tempValueLeft) && (tempValueDiagonal >= tempValueTop) ){
             
+                String line;
+                
+                if (alignment1.get(0).equals(alignment2.get(0)))
+                    line = "|";
+                else
+                    line = " ";                    
+                
                 //We add the values to the alignment
                 alig.setSequence1Char(alignment1.remove(0));
-                alig.setAlignmentType("|");
+                alig.setAlignmentType(line);
                 alig.setSequence2Char(alignment2.remove(0));
                 alig.setDescription("Diagonal");
                 
@@ -229,13 +253,15 @@ public class MatrixPP {
             
     }//End public Alignment getMaxAlignment(int tempValueDiagonal, int tempValueLeft, int tempValueTop, ArrayList<String> alignment1, ArrayList<String> alignment2)
     
-    private void printMatrix(){
+    private String printMatrix(){
     
         String string = "";
         
-        System.out.println("------");
-        System.out.println("Matrix");
-        System.out.println("------");
+        string += "------";
+        string += "Matrix";
+        string += "------";
+        
+        string += "\n";
         
         //We print the matrix
         for (int i = 0; i < this.sequence2.length+1; i++) {
@@ -246,11 +272,11 @@ public class MatrixPP {
             string += "\n";
         }//End for (int i = 0; i < this.sequence1.length+1; i++)              
             
-        System.out.println(string);
+        return string;
         
     }//End public void printMatrix()
     
-    private void printFinalAlignment(){
+    private String printFinalAlignment(){
     
         String string = "";
         
@@ -259,7 +285,7 @@ public class MatrixPP {
         string += "---------------";
         string += "Final Alignment";
         string += "---------------";
-        string += "\n";
+        string += "\n";        
         
         for (Alignment al : this.finalAlignment) {
 
@@ -268,6 +294,7 @@ public class MatrixPP {
         }//End  for (Alignment al : this.finalAlignment)        
         
         string += "\n";
+        string += " ";
         
         for (Alignment al : this.finalAlignment) {
 
@@ -285,7 +312,7 @@ public class MatrixPP {
         
         string += "\n";
         
-        System.out.println(string);
+        return string;
     
     }//End public void printFinalAlignment()       
     
