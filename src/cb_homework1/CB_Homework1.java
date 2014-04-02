@@ -139,16 +139,17 @@ public class CB_Homework1 {
 
                 case 4:
                     
-//                    System.out.print("Please enter the first sequence (EX: g,c,c,g,a,t,t,c): ");                                       
-//                    sq1 = input.next();         
-//                    System.out.print("Please enter the second sequence (EX: g,c,c,g,a,t,t,c): ");                                       
-//                    sq2 = input.next(); 
+                    //Example                           
+//                    String strSequence1 = "g,a,a,t,t,c,a,g,t,t,a";
+//                    String strSequence2 = "g,g,a,t,c,g,a";                      
                     
-        String strSequence1 = "g,a,a,t,t,c,a,g,t,t,a";
-        String strSequence2 = "g,g,a,t,c,g,a";                      
-                    
+                    System.out.print("Please enter the first sequence (EX: g,c,c,g,a,t,t,c): ");                                       
+                    sq1 = input.next();         
+                    System.out.print("Please enter the second sequence (EX: g,c,c,g,a,t,t,c): ");                                       
+                    sq2 = input.next(); 
+                                        
                     //We execute the algorithm
-                    mpp.execute(strSequence1, strSequence2);                                                           
+                    mpp.execute(sq1, sq2);                                                           
                     
                     //We print both sequences
                     System.out.println();
