@@ -24,6 +24,13 @@ public class CB_Homework1 {
         
         input = new Scanner(System.in);
         
+        Functions f = new Functions();
+        
+        int n = 16, r = 3;
+        System.out.println("Non Repeated Permutation P("+n+","+r+")"+" = "+f.PermutationNonRepeat(n, r));
+        System.out.println("Repeated Permutation P("+n+","+r+")"+" = "+f.PermutationRepeat(n, r));
+        System.out.println("");
+        
         String strSequence1 = "g,a,a,t,t,c,a,g,t,t,a";
         String strSequence2 = "g,g,a,t,c,g,a";       
         
