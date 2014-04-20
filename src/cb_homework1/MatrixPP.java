@@ -17,9 +17,9 @@ public class MatrixPP {
     String[] sequence1;
     String[] sequence2;
     int[][] matrix;
-    private int gapPenalty = 0;
-    private int misMatchGood = 1;
-    private int misMatchBad = 0;
+    private int gapPenalty = -2;
+    private int misMatchGood = 2;
+    private int misMatchBad = -1;
     
     //Final Alignment
     ArrayList<Alignment> finalAlignment;
@@ -37,6 +37,39 @@ public class MatrixPP {
         
     public void execute(String seq1, String seq2){
                    
+        seq1 = "EHBEGCHBGBCGCHBGBEEGCHBGBEEGCHBGBECDDBFCGFEGDAFCFDGHFFBABHHBCDDACCCGCBFHFGFGEFAEDGADBHFHHADDBEHDDBCFGFCDCCDCGFBAFEBDBDDBEBBHBGBEEEEHHCCHBDHEDHAFAGADHEBHCABAFBHCFDCBAGACFFAHFFHABHBBDAEFFAGAGGEECFEAGGBCHBBGBGCDDBDFEABHFFBGFBFABGCBCFHFAFBFAFGDGCCFCAGGBBGCGCHFBFGDDBFGFBGCGBEBDHCFBFAGDCECBBGADCEBAHHBEHFCCDFADFEGHCEGFAHBDGGBCEAADBHHHBDEBBFHABACHBHCDFFEHFFHCHDBEBDEEHGAAHFHADAAFBFAAHECGGFHGGAGBHFADCBEFAAGEACHFGDGCHEEGCAEEBFABGGDGFCGECAEHCDBHABHDEHEFCDADBDBCAFCGCFCGEDCAGBBCBFDEEGCGGADFFDHAA";
+        seq2 = "EECHCAEDGHHADHGGBAFCAGFBGEAGDGFCBDEHGFCBHDBBGGGGBAHGBAHBHGHGBDEGEAFCBGBGCFHEFCCHHEFACDGGFCGFBABGEAFCCAGACCCGAEHBAHFAFGGHBCFAEADACDACGGGDCGEFBCHAFBACGEADCGHCCCHHCGGEHHFCGBDGCAHHGBAABCGGDCEGBGHBGACDDEDHDCCGAFCGFDGAEFBAGHFACEDCFFAEBGAAAAFFBFADDFFBBHECBCGHEFBFFHCDCBEDFCGBEHFACHGFDGEGHCHGHCBBGHBEEABFCGCACCGAGHHGEFHADCGACHFAECFGGAGAGHFGCEAGHBBFGCHFGHCFAGEFEFECBBCGEBBGGHEFCEHBAHGHCGFHDAGDCECHAAFFCGEHFGCEACDECACDFBHDGGECFDGECGCBHCCGHFACHGFDHABADGACEBDGEHEFBFDBAFFEFGCCCCFCBHFGHGAEDDHACCDBCCEHEGBECBGAAAEGBABCHCFD";
+        
+        //seq1 = "GATTACA";
+        //seq2 = "GCATGCU";
+        
+        char[] chr1 = seq1.toCharArray();
+        char[] chr2 = seq2.toCharArray();
+        
+        seq1 = "";
+        seq2 = "";
+        
+        for (char ch : chr1) {
+            
+            seq1 = seq1+ch+",";
+            
+        }
+
+        for (char ch : chr2) {
+            
+            seq2 = seq2+ch+",";
+            
+        }        
+        
+        System.out.println("Length seq1 = "+seq1.length());
+        System.out.println("Length seq2 = "+seq2.length());
+        
+        seq1 = seq1.substring(0, seq1.length()-1);
+        seq2 = seq2.substring(0, seq2.length()-1);
+        
+//        seq1 = "G,A,A,T,T,C,A,G,T,T,A";
+//        seq2 = "G,G,A,T,C,G,A";
+        
         //We initialize the sequences
         seq1 = seq1.toLowerCase();
         this.sequence1 = seq1.split(",");        
@@ -56,7 +89,9 @@ public class MatrixPP {
         
         this.traceBack();
         
-        this.printFinalAlignment();        
+        //this.traceBack2();
+        
+        this.printFinalAlignment();      
             
     }//End public void execute()
     
@@ -100,6 +135,108 @@ public class MatrixPP {
     
     }//End private void calculateMaximum()
         
+//    private void traceBack(){
+//    
+//        //We reverse the sequences
+//        //Initialize finalAlignment1        
+//        ArrayList<String> alignment1;
+//        alignment1 = new ArrayList();
+//        for (int i = this.sequence1.length - 1; i >= 0; i--) {
+//            alignment1.add(this.sequence1[i]);
+//        }//End for (int i = this.sequence1.length - 1; i >= 0; i--)
+//
+//        //Initialize finalAlignment2
+//        ArrayList<String> alignment2;
+//        alignment2 = new ArrayList();
+//        for (int i = this.sequence2.length - 1; i >= 0; i--) {
+//            alignment2.add(this.sequence2[i]);
+//        }//End for (int i = this.sequence1.length - 1; i >= 0; i--)           
+//                                     
+//        //1 Dimension Array that will keep track of the current cell [i,j]
+//        //We will initialize it with the cell of the bottom right corner
+//        int i = this.sequence2.length; 
+//        int j = this.sequence1.length;
+//        int[] tempCell = {i, j};
+//    
+//        //We initialize the arraylist that will contain the final alignments
+//        finalAlignment  = new ArrayList();
+//        
+//        while( (!alignment1.isEmpty()) || (!alignment2.isEmpty()) ){
+//        
+//            int tempValueDiagonal;
+//            int tempValueTop;
+//            int tempValueLeft;
+//            
+//            //Diagonal
+//            int tempIDiagonal = tempCell[0] - 1;
+//            int tempJDiagonal = tempCell[1] - 1;
+//            //We determine the value of the diagonal
+//            if (!alignment1.isEmpty() || !alignment2.isEmpty()){
+//            
+//                 System.out.println("tempIDiagonal: "+tempIDiagonal);
+//                 System.out.println("tempJDiagonal: "+tempJDiagonal);
+//                 tempValueDiagonal = this.matrix[tempIDiagonal][tempJDiagonal] + this.getMisMatchGood();   
+//            
+//            }else {
+//            
+//                tempValueDiagonal = this.matrix[tempIDiagonal][tempJDiagonal];
+//                
+//            }
+//            
+////            if ( alignment1.get(0).equals(alignment2.get(0))){
+////                tempValueDiagonal = this.matrix[tempIDiagonal][tempJDiagonal] + this.getMisMatchGood();
+////            }//End if ( alignment1.get(0).equals(alignment2.get(0)))
+////            else {            
+////                tempValueDiagonal = this.matrix[tempIDiagonal][tempJDiagonal];
+////            }//End else
+//        
+//            //Top
+//            int tempITop = tempCell[0] - 1;
+//            int tempJTop = tempCell[1];
+//            //We determine the value of the diagonal
+//            tempValueTop = this.matrix[tempITop][tempJTop] + this.getGapPenalty();
+//            
+//            //Left
+//            int tempILeft = tempCell[0];
+//            int tempJLeft = tempCell[1] - 1;
+//            //We determine the value of the diagonal
+//            tempValueLeft = this.matrix[tempILeft][tempJLeft] + this.getGapPenalty();                                    
+//            
+//            //We add the alignment to the final alignment set "Answer"
+//            Alignment alig = (getMaxAlignment(tempValueDiagonal, tempValueLeft, tempValueTop, alignment1, alignment2));
+//            
+//            //We now determine where to position our tempCell
+//            switch(alig.getDescription()){
+//            
+//                case "Diagonal":
+//                    tempCell[0] = tempIDiagonal;
+//                    tempCell[1] = tempJDiagonal;
+//                    break;
+//                    
+//                case "Left":
+//                    tempCell[0] = tempILeft;
+//                    tempCell[1] = tempJLeft;
+//                    break;
+//
+//                case "Top":
+//                    tempCell[0] = tempITop;
+//                    tempCell[1] = tempJTop;                    
+//                    break;
+//
+//                default:
+//                    break;
+//                    
+//            }//End switch(alig.getDescription())
+//            
+//            //Now we add alig to the final answer finalalignment
+//            this.finalAlignment.add(alig);
+//            
+//        }//End while( (!alignment1.isEmpty()) || (!alignment2.isEmpty()) )
+//                
+//        Collections.reverse(this.finalAlignment);
+//        
+//    }//End traceBack()
+    
     private void traceBack(){
     
         //We reverse the sequences
@@ -126,7 +263,7 @@ public class MatrixPP {
         //We initialize the arraylist that will contain the final alignments
         finalAlignment  = new ArrayList();
         
-        while( (!alignment1.isEmpty()) || (!alignment2.isEmpty()) ){
+        while( (tempCell[0] > 0) && (tempCell[1] > 0) ){
         
             int tempValueDiagonal;
             int tempValueTop;
@@ -136,13 +273,17 @@ public class MatrixPP {
             int tempIDiagonal = tempCell[0] - 1;
             int tempJDiagonal = tempCell[1] - 1;
             //We determine the value of the diagonal
+            
+            System.out.println("tempIDiagonal: "+tempIDiagonal);
+            System.out.println("tempJDiagonal: "+tempJDiagonal);
+
             if ( alignment1.get(0).equals(alignment2.get(0))){
                 tempValueDiagonal = this.matrix[tempIDiagonal][tempJDiagonal] + this.getMisMatchGood();
             }//End if ( alignment1.get(0).equals(alignment2.get(0)))
             else {            
                 tempValueDiagonal = this.matrix[tempIDiagonal][tempJDiagonal];
             }//End else
-        
+                    
             //Top
             int tempITop = tempCell[0] - 1;
             int tempJTop = tempCell[1];
@@ -156,7 +297,7 @@ public class MatrixPP {
             tempValueLeft = this.matrix[tempILeft][tempJLeft] + this.getGapPenalty();                                    
             
             //We add the alignment to the final alignment set "Answer"
-            Alignment alig = (getMaxAlignment(tempValueDiagonal, tempValueLeft, tempValueTop, alignment1, alignment2));
+            Alignment alig = getMaxAlignment(tempValueDiagonal, tempValueLeft, tempValueTop, alignment1, alignment2);
             
             //We now determine where to position our tempCell
             switch(alig.getDescription()){
@@ -184,11 +325,55 @@ public class MatrixPP {
             //Now we add alig to the final answer finalalignment
             this.finalAlignment.add(alig);
             
-        }//End ( (!alignment1.isEmpty()) || (!alignment2.isEmpty()) )
-                
+        }//End while( (tempCell[0] >= 0) || (tempCell[1] >= 0) )
+        
+        //If there are still values in alignment1 or alignment2 we add them
+//        while ( !alignment1.isEmpty() && !alignment2.isEmpty() ){
+//        
+//            Alignment algTemp = new Alignment();
+//            
+//            if (!alignment1.isEmpty()){
+//                algTemp.setSequence1Char(alignment1.remove(0));
+//                algTemp.setDescription("Empty");
+//                algTemp.setAlignmentType(" ");                
+//                
+//                if (!alignment2.isEmpty()){
+//                
+//                    algTemp.setSequence2Char(alignment2.remove(0));                    
+//                    
+//                }//End if (!alignment2.isEmpty())
+//                
+//            }
+//                
+//                
+//        
+//        }
+        
+        
         Collections.reverse(this.finalAlignment);
         
     }//End traceBack()
+    
+    private void traceBack2(){
+    
+        //1 Dimension Array that will keep track of the current cell [i,j]
+        //We will initialize it with the cell of the bottom right corner
+        int i = this.sequence2.length; 
+        int j = this.sequence1.length;
+        int[] tempCell = {i, j};
+                
+        while ( (tempCell[0] > 0) && (tempCell[1] > 0) ){
+        
+            System.out.println("tempCell i = " +i+ ", j = " +j );
+            System.out.println("Matrix[i][j] = "+this.matrix[i][j]);            
+            
+            tempCell[0] = tempCell[0] - 1;
+            tempCell[1] = tempCell[1] - 1;
+            
+        }
+        
+    }//End private void traceBack2()
+    
     
     public Alignment getMaxAlignment(int tempValueDiagonal, int tempValueLeft, int tempValueTop, ArrayList<String> alignment1, ArrayList<String> alignment2){
     
@@ -253,12 +438,14 @@ public class MatrixPP {
         for (int i = 0; i < this.sequence2.length+1; i++) {
             for (int j = 0; j < this.sequence1.length+1; j++) {
                 //string += "["+i+"]"+"["+j+"] = "+this.matrix[i][j] + " ";
-                string += this.matrix[i][j] + " ";
+                //string += this.matrix[i][j] + " ";
+                System.out.print(this.matrix[i][j] + " ");
             }//End for (int j = 0; j < this.sequence2.length+1; j++)
-            string += "\n";
+            //string += "\n";
+            System.out.println("");
         }//End for (int i = 0; i < this.sequence1.length+1; i++)              
             
-        System.out.println(string);
+//        System.out.println(string);
         
     }//End public void printMatrix()
     
