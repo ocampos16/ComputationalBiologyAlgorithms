@@ -30,7 +30,7 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
         
     private File opened_file;
     Sequence _targetSequence = new Sequence (">Sequence_of_Interest", "EHBEGCHBGBCGCHBGBEEGCHBGBEEGCHBGBECDDBFCGFEGDAFCFDGHFFBABHHBCDDACCCGCBFHFGFGEFAEDGADBHFHHADDBEHDDBCFGFCDCCDCGFBAFEBDBDDBEBBHBGBEEEEHHCCHBDHEDHAFAGADHEBHCABAFBHCFDCBAGACFFAHFFHABHBBDAEFFAGAGGEECFEAGGBCHBBGBGCDDBDFEABHFFBGFBFABGCBCFHFAFBFAFGDGCCFCAGGBBGCGCHFBFGDDBFGFBGCGBEBDHCFBFAGDCECBBGADCEBAHHBEHFCCDFADFEGHCEGFAHBDGGBCEAADBHHHBDEBBFHABACHBHCDFFEHFFHCHDBEBDEEHGAAHFHADAAFBFAAHECGGFHGGAGBHFADCBEFAAGEACHFGDGCHEEGCAEEBFABGGDGFCGECAEHCDBHABHDEHEFCDADBDBCAFCGCFCGEDCAGBBCBFDEEGCGGADFFDHAA");
-    ArrayList<Sequence> _sequences;
+    ArrayList<Sequence> _sequences = new ArrayList();
     private DefaultListModel _model;
     private GlobalAlignment _global = new GlobalAlignment();
     
@@ -208,12 +208,11 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
                 try
                 {
 
-                    int i = 0;
                     while (reader.hasNext()) {      // while there is another token to read
                         String name = reader.next();   // reads in the String tokens "Hello" "CSstudents"                                                                        
                         String sequence = reader.next();   // reads in the String tokens "There" "goodbye"
                         
-                        //this._model.addElement(new Sequence(name, sequence)); 
+                        
                         this._sequences.add(new Sequence(name, sequence));                        
                         
                     }
@@ -225,14 +224,20 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
                         ArrayList<Alignment> temp = this._global.execute(this._targetSequence.getSequence(), s.getSequence());
                         s.setAlignment(temp);
                         
+                        this._model.addElement(s); 
+                        
                     }//End for (Sequence s : this._sequences)
                     
-                    //sthis.lstHighestScores.setModel(_model);
+                    this.lstHighestScores.setModel(_model);
+                    
+                    System.out.println("");
                     
                 }
                 catch (Exception e )
                 {
 
+                    e.printStackTrace();
+                    
                 }                
                 
                 
