@@ -4,6 +4,8 @@
  */
 package cb_homework2;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Otto
@@ -12,6 +14,7 @@ public class Sequence {
     
     private String name;
     private String sequence;
+    private ArrayList<Alignment> alignment;
 
     Sequence(String name, String sequence) {
         
@@ -54,5 +57,19 @@ public class Sequence {
         return this.name;
     
     }//End public String toString()
+
+    /**
+     * @return the alignment
+     */
+    public ArrayList<Alignment> getAlignment() {
+        return alignment;
+    }
+
+    /**
+     * @param alignment the alignment to set
+     */
+    public void setAlignment(ArrayList<Alignment> alignment) {
+        this.alignment = alignment;
+    }
     
 }//End public class Sequence

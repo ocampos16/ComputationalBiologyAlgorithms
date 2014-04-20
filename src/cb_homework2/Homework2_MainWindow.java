@@ -4,6 +4,7 @@
  */
 package cb_homework2;
 
+import java.awt.Dimension;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,6 +14,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 
 /**
@@ -28,7 +31,8 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
     private File opened_file;
     Sequence _targetSequence = new Sequence (">Sequence_of_Interest", "EHBEGCHBGBCGCHBGBEEGCHBGBEEGCHBGBECDDBFCGFEGDAFCFDGHFFBABHHBCDDACCCGCBFHFGFGEFAEDGADBHFHHADDBEHDDBCFGFCDCCDCGFBAFEBDBDDBEBBHBGBEEEEHHCCHBDHEDHAFAGADHEBHCABAFBHCFDCBAGACFFAHFFHABHBBDAEFFAGAGGEECFEAGGBCHBBGBGCDDBDFEABHFFBGFBFABGCBCFHFAFBFAFGDGCCFCAGGBBGCGCHFBFGDDBFGFBGCGBEBDHCFBFAGDCECBBGADCEBAHHBEHFCCDFADFEGHCEGFAHBDGGBCEAADBHHHBDEBBFHABACHBHCDFFEHFFHCHDBEBDEEHGAAHFHADAAFBFAAHECGGFHGGAGBHFADCBEFAAGEACHFGDGCHEEGCAEEBFABGGDGFCGECAEHCDBHABHDEHEFCDADBDBCAFCGCFCGEDCAGBBCBFDEEGCGGADFFDHAA");
     ArrayList<Sequence> _sequences;
-    private DefaultListModel model;
+    private DefaultListModel _model;
+    private GlobalAlignment _global = new GlobalAlignment();
     
     public Homework2_MainWindow() {
         
@@ -75,6 +79,11 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
         lblTarget.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblTarget.setText("Target Sequence");
 
+        lstHighestScores.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstHighestScoresValueChanged(evt);
+            }
+        });
         scrHighestScores.setViewportView(lstHighestScores);
 
         lblHighestScores.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -85,7 +94,7 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
 
         txtSequenceFile.setEditable(false);
 
-        pnlScores.setLayout(new java.awt.GridLayout());
+        pnlScores.setLayout(new java.awt.GridLayout(1, 0));
 
         lblAlignmentType.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblAlignmentType.setText("Alignment Type");
@@ -111,16 +120,8 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
         lblAlignment.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblAlignment.setText("Alignment");
 
-        javax.swing.GroupLayout pnlAlignmentLayout = new javax.swing.GroupLayout(pnlAlignment);
-        pnlAlignment.setLayout(pnlAlignmentLayout);
-        pnlAlignmentLayout.setHorizontalGroup(
-            pnlAlignmentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        pnlAlignmentLayout.setVerticalGroup(
-            pnlAlignmentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 318, Short.MAX_VALUE)
-        );
+        pnlAlignment.setBackground(new java.awt.Color(204, 204, 255));
+        pnlAlignment.setLayout(new java.awt.CardLayout());
 
         txtTSequence.setColumns(20);
         txtTSequence.setRows(5);
@@ -178,9 +179,9 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
                     .addComponent(lblHighestScores, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblAlignment, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(scrHighestScores, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pnlAlignment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(scrHighestScores, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)
+                    .addComponent(pnlAlignment, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -201,7 +202,7 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
             try {
                 
                 reader = new Scanner(new FileInputStream(this.opened_file.getAbsoluteFile()));
-                this.model = new DefaultListModel();
+                this._model = new DefaultListModel();
                 
                 // Add it to the text pane
                 try
@@ -212,37 +213,22 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
                         String name = reader.next();   // reads in the String tokens "Hello" "CSstudents"                                                                        
                         String sequence = reader.next();   // reads in the String tokens "There" "goodbye"
                         
-                        this.model.addElement(new Sequence(name, sequence));                        
-                        
-                        //int x = reader.nextInt();   // reads in the int tokens 1234  6556 
-                        //System.out.println(s + ", " + r + ", ");
-                        i++;
-                        System.out.println("se quedo "+i);
-                        
-                        if (i == 211)
-                            System.out.println("");
+                        //this._model.addElement(new Sequence(name, sequence)); 
+                        this._sequences.add(new Sequence(name, sequence));                        
                         
                     }
+                                        
                     
-                    System.out.println("paso");
-
-                    this.lstHighestScores.setModel(model);
+                    //Now we perfom Global Alignment algorithm
+                    for (Sequence s : this._sequences) {
+                        
+                        ArrayList<Alignment> temp = this._global.execute(this._targetSequence.getSequence(), s.getSequence());
+                        s.setAlignment(temp);
+                        
+                    }//End for (Sequence s : this._sequences)
                     
-
-    //                FileReader fr = new FileReader(opened_file);
-    //                BufferedReader reader = new BufferedReader(fr);
-    //                
-    //                String line;
-    //                String input = "";
-    //                while ( (line = reader.readLine()) != null )
-    //                    input += line + "\n";
-    //
-    //                queryText.setText(input);
-    //                fr.close();
-    //                reader.close();
-    //                getOutputText().append("Opened file: " + opened_file.getName() + "\n");
-    //                                
-    //                queryTabs.setTitleAt(0, opened_file.getName());
+                    //sthis.lstHighestScores.setModel(_model);
+                    
                 }
                 catch (Exception e )
                 {
@@ -259,6 +245,50 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
         }        
         
     }//GEN-LAST:event_btnBrowseFileActionPerformed
+
+    private void lstHighestScoresValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstHighestScoresValueChanged
+        // TODO add your handling code here:
+        
+        this.pnlAlignment.removeAll();
+        
+        Sequence selectedSequence = (Sequence)this.lstHighestScores.getSelectedValue();
+        
+        String[] columnNames = {"Name", "Sequence"};
+
+        ArrayList<Object> columnsSelect = new ArrayList();
+//        columnsSelect.add(this.studentTable);
+        //columnsSelect.add(this.departmentTable);
+        
+        int numColumns = 2;
+        int numRows = 1;
+        
+        Object[][] data = new Object[numRows][numColumns];
+                
+        data[0][0] = selectedSequence.getName();
+        data[0][1] = selectedSequence.getSequence();
+        
+        JTable table = new JTable(data, columnNames);       
+        //table.setPreferredScrollableViewportSize(new Dimension(500, 500));
+        table.setFillsViewportHeight(true);
+// 
+//        if (DEBUG) {
+//            table.addMouseListener(new MouseAdapter() {
+//                public void mouseClicked(MouseEvent e) {
+//                    printDebugData(table);
+//                }
+//            });
+//        }
+ 
+        //Create the scroll pane and add the table to it.
+        JScrollPane scrollPane = new JScrollPane(table);
+                
+        //Add the scroll pane to this panel.
+        this.pnlAlignment.add(scrollPane);
+        pack();        
+        
+        //this.pnlAlignment.add(scrollPane);
+        
+    }//GEN-LAST:event_lstHighestScoresValueChanged
 
     /**
      * @param args the command line arguments
@@ -288,7 +318,8 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
                 new Homework2_MainWindow().setVisible(true);
             }
         });
-    }
+    }     
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBrowseFile;
     private javax.swing.JButton btnExecute;
