@@ -11,7 +11,7 @@ import java.util.Collections;
  *
  * @author Otto
  */
-public class GlobalAlignment {
+public class LocalAlignment {
     
     //Variables
     String[] sequence1;
@@ -21,16 +21,18 @@ public class GlobalAlignment {
     private int misMatchGood = 5;
     private int misMatchBad = -3;
     
+    private int[] maxCell;
+    
     //Final Alignment
     ArrayList<Alignment> finalAlignment;
             
-    public GlobalAlignment(){
+    public LocalAlignment(){
         
-        //Determine finalAlignment1 length        
+        this.maxCell = new int[2];
         
     }//End public GlobalAlignment()
 
-    public GlobalAlignment(String seq1, String seq2){
+    public LocalAlignment(String seq1, String seq2){
    
         
     }//End public GlobalAlignment(String seq1, String seq2)        
@@ -86,7 +88,8 @@ public class GlobalAlignment {
     }//End private void fillMatrixWithCeros()
           
     private void calculateMaximum(){
-    
+        
+        int tempMax = 0;
         for (int i = 1; i <= this.sequence2.length; i++) {
             for (int j = 1; j <= this.sequence1.length; j++) {
                 
@@ -108,7 +111,26 @@ public class GlobalAlignment {
                     
                     //We assign the maximum
                     this.matrix[i][j] = maximum;
+                    //We assign the cell with the maximum value
+                    if (i == 1 && j == 1){
+                        
+                        tempMax = this.matrix[i][j];
+                        this.getMaxCell()[0] = i;
+                        this.getMaxCell()[1] = j;
+                        
+                    }//End if (i == 1 && j == 1)
+                    else {
                     
+                        if ( this.matrix[i][j] >= tempMax){
+                        
+                            tempMax = this.matrix[i][j];
+                            this.getMaxCell()[0] = i;
+                            this.getMaxCell()[1] = j;
+                        
+                        }//End if ( this.matrix[i][j] >= tempMax)
+                        
+                    }//End else
+                                        
             }//End for (int j = 0; j < this.sequence2.length+1; j++)
             
         }//End for (int i = 0; i < this.sequence1.length+1; i++)    
@@ -136,7 +158,8 @@ public class GlobalAlignment {
         //We will initialize it with the cell of the bottom right corner
         int i = this.sequence2.length; 
         int j = this.sequence1.length;
-        int[] tempCell = {i, j};
+        int[] tempCell;
+        tempCell = this.maxCell;
     
         //We initialize the arraylist that will contain the final alignments
         finalAlignment  = new ArrayList();
@@ -367,6 +390,20 @@ public class GlobalAlignment {
      */
     public void setMisMatchBad(int misMatchBad) {
         this.misMatchBad = misMatchBad;
+    }
+
+    /**
+     * @return the maxCell
+     */
+    public int[] getMaxCell() {
+        return maxCell;
+    }
+
+    /**
+     * @param maxCell the maxCell to set
+     */
+    public void setMaxCell(int[] maxCell) {
+        this.maxCell = maxCell;
     }
     
 }//End public class GlobalAlignment

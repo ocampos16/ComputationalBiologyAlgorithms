@@ -169,10 +169,11 @@
         </Component>
         <Component class="javax.swing.JRadioButton" name="rBtnLocal">
           <Properties>
+            <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="Local Alignment"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JRadioButton" name="jRadioButton2">
+        <Component class="javax.swing.JRadioButton" name="rBtnGlobal">
           <Properties>
             <Property name="text" type="java.lang.String" value="Global Alignment"/>
           </Properties>
@@ -184,6 +185,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Execute"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnExecuteActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

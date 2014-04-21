@@ -21,7 +21,8 @@ public class Sequence implements Comparable<Sequence>{
         
         this.name = name;
         this.sequence = sequence;
-        this.alignment = new ArrayList();        
+        this.alignment = new ArrayList();
+        this.score = 0;
         
     }//End Sequence(String name, String sequence)
 

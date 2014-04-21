@@ -9,9 +9,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
@@ -35,6 +37,8 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
     ArrayList<Sequence> _sequences = new ArrayList();
     private ListModelSequence _model;
     private GlobalAlignment _global = new GlobalAlignment();
+    private LocalAlignment _local = new LocalAlignment();
+    ButtonGroup _btnGroup;
     
     public Homework2_MainWindow() {
         
@@ -43,6 +47,11 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
         
         this.txtTarget.setText(this._targetSequence.getName());
         this.txtTSequence.setText(this._targetSequence.getSequence());
+        
+        //Radio Button Group
+        this._btnGroup = new ButtonGroup();
+        this._btnGroup.add(rBtnLocal);
+        this._btnGroup.add(rBtnGlobal);
     }
 
     /**
@@ -65,7 +74,7 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
         pnlScores = new javax.swing.JPanel();
         lblAlignmentType = new javax.swing.JLabel();
         rBtnLocal = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        rBtnGlobal = new javax.swing.JRadioButton();
         btnExecute = new javax.swing.JButton();
         btnBrowseFile = new javax.swing.JButton();
         lblAlignment = new javax.swing.JLabel();
@@ -102,14 +111,20 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
         lblAlignmentType.setText("Alignment Type");
         pnlScores.add(lblAlignmentType);
 
+        rBtnLocal.setSelected(true);
         rBtnLocal.setText("Local Alignment");
         pnlScores.add(rBtnLocal);
 
-        jRadioButton2.setText("Global Alignment");
-        pnlScores.add(jRadioButton2);
+        rBtnGlobal.setText("Global Alignment");
+        pnlScores.add(rBtnGlobal);
 
         btnExecute.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnExecute.setText("Execute");
+        btnExecute.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExecuteActionPerformed(evt);
+            }
+        });
         pnlScores.add(btnExecute);
 
         btnBrowseFile.setText("Browse File");
@@ -216,24 +231,7 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
                                                 
                         this._sequences.add(new Sequence(name, sequence));                        
                         
-                    }
-                                                            
-                    //Now we perfom Global Alignment algorithm
-                    for (Sequence s : this._sequences) {
-                        
-                        ArrayList<Alignment> temp = this._global.execute(this._targetSequence.getSequence(), s.getSequence());
-                        s.setAlignment(temp);
-                        s.calculateScore();
-                        
-                        //this._model.addElement(s);
-                        
-                    }//End for (Sequence s : this._sequences)
-                    
-                    
-                    this._model.setList(_sequences);
-                    this._model.sort();
-                                                            
-                    this.lstHighestScores.setModel(_model);                                        
+                    }                                                                                               
                     
                 }
                 catch (Exception e )
@@ -322,6 +320,32 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
         
     }//GEN-LAST:event_lstHighestScoresValueChanged
 
+    private void btnExecuteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExecuteActionPerformed
+        // TODO add your handling code here:        
+        
+        //Now we perfom Global Alignment algorithm
+        for (Sequence s : this._sequences) {
+
+            ArrayList<Alignment> temp;
+            
+            if (this.rBtnGlobal.isSelected())
+                temp = this._global.execute(this._targetSequence.getSequence(), s.getSequence());
+            else
+                temp = this._local.execute(this._targetSequence.getSequence(), s.getSequence());
+            
+            s.setAlignment(temp);
+            s.calculateScore();
+
+        }//End for (Sequence s : this._sequences)
+
+        this._model.setList(_sequences);
+        this._model.sort();
+        Collections.reverse(this._model._sequence);
+
+        this.lstHighestScores.setModel(_model);                                          
+                
+    }//GEN-LAST:event_btnExecuteActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -356,7 +380,6 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton btnBrowseFile;
     private javax.swing.JButton btnExecute;
     private javax.swing.JFileChooser fileChooser;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAlignment;
     private javax.swing.JLabel lblAlignmentType;
@@ -366,6 +389,7 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
     private javax.swing.JList lstHighestScores;
     private javax.swing.JPanel pnlAlignment;
     private javax.swing.JPanel pnlScores;
+    private javax.swing.JRadioButton rBtnGlobal;
     private javax.swing.JRadioButton rBtnLocal;
     private javax.swing.JScrollPane scrHighestScores;
     private javax.swing.JTextField txtSequenceFile;
