@@ -16,6 +16,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 
 /**
@@ -31,7 +33,7 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
     private File opened_file;
     Sequence _targetSequence = new Sequence (">Sequence_of_Interest", "EHBEGCHBGBCGCHBGBEEGCHBGBEEGCHBGBECDDBFCGFEGDAFCFDGHFFBABHHBCDDACCCGCBFHFGFGEFAEDGADBHFHHADDBEHDDBCFGFCDCCDCGFBAFEBDBDDBEBBHBGBEEEEHHCCHBDHEDHAFAGADHEBHCABAFBHCFDCBAGACFFAHFFHABHBBDAEFFAGAGGEECFEAGGBCHBBGBGCDDBDFEABHFFBGFBFABGCBCFHFAFBFAFGDGCCFCAGGBBGCGCHFBFGDDBFGFBGCGBEBDHCFBFAGDCECBBGADCEBAHHBEHFCCDFADFEGHCEGFAHBDGGBCEAADBHHHBDEBBFHABACHBHCDFFEHFFHCHDBEBDEEHGAAHFHADAAFBFAAHECGGFHGGAGBHFADCBEFAAGEACHFGDGCHEEGCAEEBFABGGDGFCGECAEHCDBHABHDEHEFCDADBDBCAFCGCFCGEDCAGBBCBFDEEGCGGADFFDHAA");
     ArrayList<Sequence> _sequences = new ArrayList();
-    private DefaultListModel _model;
+    private ListModelSequence _model;
     private GlobalAlignment _global = new GlobalAlignment();
     
     public Homework2_MainWindow() {
@@ -202,7 +204,7 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
             try {
                 
                 reader = new Scanner(new FileInputStream(this.opened_file.getAbsoluteFile()));
-                this._model = new DefaultListModel();
+                this._model = new ListModelSequence();
                 
                 // Add it to the text pane
                 try
@@ -211,26 +213,27 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
                     while (reader.hasNext()) {      // while there is another token to read
                         String name = reader.next();   // reads in the String tokens "Hello" "CSstudents"                                                                        
                         String sequence = reader.next();   // reads in the String tokens "There" "goodbye"
-                        
-                        
+                                                
                         this._sequences.add(new Sequence(name, sequence));                        
                         
                     }
-                                        
-                    
+                                                            
                     //Now we perfom Global Alignment algorithm
                     for (Sequence s : this._sequences) {
                         
                         ArrayList<Alignment> temp = this._global.execute(this._targetSequence.getSequence(), s.getSequence());
                         s.setAlignment(temp);
+                        s.calculateScore();
                         
-                        this._model.addElement(s); 
+                        //this._model.addElement(s);
                         
                     }//End for (Sequence s : this._sequences)
                     
-                    this.lstHighestScores.setModel(_model);
                     
-                    System.out.println("");
+                    this._model.setList(_sequences);
+                    this._model.sort();
+                                                            
+                    this.lstHighestScores.setModel(_model);                                        
                     
                 }
                 catch (Exception e )
@@ -254,42 +257,66 @@ public class Homework2_MainWindow extends javax.swing.JFrame {
     private void lstHighestScoresValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstHighestScoresValueChanged
         // TODO add your handling code here:
         
-        this.pnlAlignment.removeAll();
-        
-        Sequence selectedSequence = (Sequence)this.lstHighestScores.getSelectedValue();
-        
-        String[] columnNames = {"Name", "Sequence"};
+//        this.pnlAlignment.removeAll();
+//        
+//        //We get the selected sequence
+//        Sequence selectedSequence = (Sequence)this.lstHighestScores.getSelectedValue();
+//        
+//        final int columnNumber = selectedSequence.getAlignment().size();
+//        final int rowNumber = 3;
+//        
+//        Object[][] sequenceData = new Object[rowNumber][columnNumber];        
+//        
+//        int i = 0;
+//        for (Alignment alg : selectedSequence.getAlignment()) {
+//            
+//            //Write one alignment
+//            sequenceData[0][i] = alg.getSequence1Char();
+//            sequenceData[1][i] = alg.getAlignmentType();
+//            sequenceData[2][i] = alg.getSequence2Char();             
+//            i++;
+//            
+//        }//End for (Alignment alg : selectedSequence.getAlignment())
+//        
+//        String[] columnNames = new String[columnNumber];
+//        
+//        for (int j = 0; j < columnNumber; j++) {
+//            
+//            columnNames[j] = ""+j+1;
+//            
+//        }//End for (int j = 1; j < columnNumber; j++)       
 
-        ArrayList<Object> columnsSelect = new ArrayList();
-//        columnsSelect.add(this.studentTable);
-        //columnsSelect.add(this.departmentTable);
+//        ArrayList<Object> columnsSelect = new ArrayList();
+////        columnsSelect.add(this.studentTable);
+//        //columnsSelect.add(this.departmentTable);
+//        
+//        int numColumns = 2;
+//        int numRows = 1;
+//        
+//        Object[][] data = new Object[numRows][numColumns];
+//                
+//        data[0][0] = selectedSequence.getName();
+//        data[0][1] = selectedSequence.getSequence();
         
-        int numColumns = 2;
-        int numRows = 1;
-        
-        Object[][] data = new Object[numRows][numColumns];
-                
-        data[0][0] = selectedSequence.getName();
-        data[0][1] = selectedSequence.getSequence();
-        
-        JTable table = new JTable(data, columnNames);       
-        //table.setPreferredScrollableViewportSize(new Dimension(500, 500));
-        table.setFillsViewportHeight(true);
+//        JTable table = new JTable(sequenceData, columnNames);           
+//        //table.setPreferredScrollableViewportSize(new Dimension(500, 500));
+//        //table.setFillsViewportHeight(true);
+////        
+////TableColumnModel tcm = table.getColumnModel();
+////
+////        for (String string : columnNames) {
+////            
+////        }
+//
+//
 // 
-//        if (DEBUG) {
-//            table.addMouseListener(new MouseAdapter() {
-//                public void mouseClicked(MouseEvent e) {
-//                    printDebugData(table);
-//                }
-//            });
-//        }
- 
-        //Create the scroll pane and add the table to it.
-        JScrollPane scrollPane = new JScrollPane(table);
-                
-        //Add the scroll pane to this panel.
-        this.pnlAlignment.add(scrollPane);
-        pack();        
+//        //Create the scroll pane and add the table to it.
+//        JScrollPane scrollPane = new JScrollPane(table);
+//        scrollPane.setAutoscrolls(true);
+//                
+//        //Add the scroll pane to this panel.
+//        this.pnlAlignment.add(scrollPane);
+//        pack();        
         
         //this.pnlAlignment.add(scrollPane);
         

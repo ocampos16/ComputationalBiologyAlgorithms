@@ -53,10 +53,7 @@ public class GlobalAlignment {
             
             seq2 = seq2+ch+",";
             
-        }//End for (char ch : chr2)
-        
-        System.out.println("Length seq1 = "+seq1.length());
-        System.out.println("Length seq2 = "+seq2.length());
+        }//End for (char ch : chr2)        
         
         seq1 = seq1.substring(0, seq1.length()-1);
         seq2 = seq2.substring(0, seq2.length()-1);
@@ -149,20 +146,20 @@ public class GlobalAlignment {
             int tempValueDiagonal;
             int tempValueTop;
             int tempValueLeft;
+            int score;
             
             //Diagonal
             int tempIDiagonal = tempCell[0] - 1;
             int tempJDiagonal = tempCell[1] - 1;
-            //We determine the value of the diagonal
-            
-            System.out.println("tempIDiagonal: "+tempIDiagonal);
-            System.out.println("tempJDiagonal: "+tempJDiagonal);
+            //We determine the value of the diagonal            
 
             if ( alignment1.get(0).equals(alignment2.get(0))){
                 tempValueDiagonal = this.matrix[tempIDiagonal][tempJDiagonal] + this.getMisMatchGood();
+                score = this.misMatchGood;
             }//End if ( alignment1.get(0).equals(alignment2.get(0)))
             else {            
                 tempValueDiagonal = this.matrix[tempIDiagonal][tempJDiagonal];
+                score = this.misMatchBad;
             }//End else
                     
             //Top
@@ -186,16 +183,19 @@ public class GlobalAlignment {
                 case "Diagonal":
                     tempCell[0] = tempIDiagonal;
                     tempCell[1] = tempJDiagonal;
+                    alig.setScore(score);
                     break;
                     
                 case "Left":
                     tempCell[0] = tempILeft;
                     tempCell[1] = tempJLeft;
+                    alig.setScore(this.gapPenalty);
                     break;
 
                 case "Top":
                     tempCell[0] = tempITop;
                     tempCell[1] = tempJTop;                    
+                    alig.setScore(this.gapPenalty);
                     break;
 
                 default:

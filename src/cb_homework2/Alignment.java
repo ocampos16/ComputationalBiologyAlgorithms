@@ -15,6 +15,7 @@ public class Alignment {
     private String alignmentType;
     private String description;
     private Alignment alignment;
+    private int score;
     
     /**
      * @return the sequence1Char
@@ -84,6 +85,20 @@ public class Alignment {
      */
     public void setAlignment(Alignment alignment) {
         this.alignment = alignment;
+    }
+
+    /**
+     * @return the score
+     */
+    public int getScore() {
+        return score;
+    }
+
+    /**
+     * @param score the score to set
+     */
+    public void setScore(int score) {
+        this.score = score;
     }
     
     
