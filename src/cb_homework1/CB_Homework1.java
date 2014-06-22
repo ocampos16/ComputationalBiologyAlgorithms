@@ -150,9 +150,9 @@ public class CB_Homework1 {
 //                    String strSequence1 = "g,a,a,t,t,c,a,g,t,t,a";
 //                    String strSequence2 = "g,g,a,t,c,g,a";                      
                     
-                    System.out.print("Please enter the first sequence (EX: g,c,c,g,a,t,t,c): ");                                       
+                    System.out.print("Please enter the first sequence (EX: gccgattc): ");                                       
                     sq1 = input.next();         
-                    System.out.print("Please enter the second sequence (EX: g,c,c,g,a,t,t,c): ");                                       
+                    System.out.print("Please enter the second sequence (EX: gccgattc): ");                                       
                     sq2 = input.next(); 
                                         
                     //We execute the algorithm
